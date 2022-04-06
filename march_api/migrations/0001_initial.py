@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('twpp', models.FloatField()),
                 ('otwpp', models.FloatField()),
                 ('shooteff', models.FloatField()),
-                ('oshootoff', models.FloatField()),
+                ('oshooteff', models.FloatField()),
                 ('fgmpg', models.FloatField()),
                 ('ofgmpg', models.FloatField()),
                 ('fgapg', models.FloatField()),

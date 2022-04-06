@@ -11,12 +11,13 @@ class Team(models.Model):
     fgp = models.FloatField()       # field goal percentage
     ofgp = models.FloatField()      # opponent field goal percentage
     ftp = models.FloatField()       # free throw percentage
+    oftp = models.FloatField(default=None)      # opponent free throw percentage
     thpp = models.FloatField()      # three point percentage
     othpp = models.FloatField()     # opponent three point percentage
     twpp = models.FloatField()      # two point percentage
     otwpp = models.FloatField()     # opponent two point percentage
     shooteff = models.FloatField()  # shooting efficiency
-    oshootoff = models.FloatField() # opponent shooting efficiency
+    oshooteff = models.FloatField() # opponent shooting efficiency
     fgmpg = models.FloatField()     # field goals made per game
     ofgmpg = models.FloatField()    # opponent field goals made per game
     fgapg = models.FloatField()     # field goals attempted per game

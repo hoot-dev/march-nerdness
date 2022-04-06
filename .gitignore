@@ -1,3 +1,5 @@
 team-info
 db.sqlite3
-.venv
+.venv/
+test-tourney.py
+test.json
