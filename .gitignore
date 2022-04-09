@@ -4,6 +4,10 @@ test-tourney.py
 test.json
 .vscode/
 test-response.json
+web_scraper.py
+sample.html
+team_slugs
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
