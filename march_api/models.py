@@ -1,8 +1,27 @@
 from django.db import models
 
+
+class Bracket(models.Model):
+    name = models.CharField(max_length=100, default='2022 NCAA Bracket')
+    slug = models.SlugField(max_length=100, default='2022-ncaa-bracket')
+
+    def __str__(self):
+        return self.name
+
+
+class Region(models.Model):
+    name = models.CharField(max_length=20)
+    bracket = models.ForeignKey(Bracket, related_name="regions", on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.name
+
 class Team(models.Model):
-    city = models.CharField(max_length=40)
+    college = models.CharField(max_length=40)
     mascot = models.CharField(max_length=40)
+    seed = models.IntegerField(default=0)
+    region = models.ForeignKey(Region, related_name="teams", on_delete=models.PROTECT)
+    region_position = models.IntegerField() # where located within region
     ppg = models.FloatField()       # points per game
     asm = models.FloatField()       # avg score margin
     rpg = models.FloatField()       # rebounds per game
@@ -36,10 +55,10 @@ class Team(models.Model):
     otopg = models.FloatField()     # opponent turnovers per game
     pfpg = models.FloatField()      # personal fouls per game
     opfpg = models.FloatField()     # opponent personal fouls per game
+
+    class Meta:
+        ordering = ['region_position']
     
     def __str__(self):
-        return self.city + ' ' + self.mascot
-
-
-
+        return self.college + ' ' + self.mascot
 
