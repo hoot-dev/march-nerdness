@@ -16,12 +16,14 @@ class Region(models.Model):
     def __str__(self):
         return self.name
 
+
 class Team(models.Model):
     college = models.CharField(max_length=40)
     mascot = models.CharField(max_length=40)
-    seed = models.IntegerField(default=0)
-    region = models.ForeignKey(Region, related_name="teams", on_delete=models.PROTECT)
-    region_position = models.IntegerField() # where located within region
+    seed = models.IntegerField(null=True, blank=True)
+    region = models.ForeignKey(Region, related_name="teams", null=True, blank=True, 
+                               on_delete=models.PROTECT)
+    region_position = models.IntegerField(null=True, blank=True) # where located within region
     ppg = models.FloatField()       # points per game
     opp_ppg = models.FloatField()      # opponent points per game
     avg_score_margin = models.FloatField()       # avg score margin
