@@ -10,20 +10,36 @@ class Bracket(models.Model):
 
 
 class Region(models.Model):
-    name = models.CharField(max_length=20)
-    bracket = models.ForeignKey(Bracket, related_name="regions", on_delete=models.PROTECT)
+    name = models.CharField(max_length=10)
+    bracket = models.ForeignKey(Bracket, related_name="regions", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
 
 class Team(models.Model):
-    college = models.CharField(max_length=40)
+    college = models.CharField(max_length=40, unique=True)
     mascot = models.CharField(max_length=40)
     seed = models.IntegerField(null=True, blank=True)
     region = models.ForeignKey(Region, related_name="teams", null=True, blank=True, 
-                               on_delete=models.PROTECT)
-    region_position = models.IntegerField(null=True, blank=True) # where located within region
+                               on_delete=models.CASCADE)
+    region_position = models.SmallIntegerField(null=True, blank=True)
+    position_choices = [
+        ('top', 'Top'),
+        ('bot', 'Bottom')
+    ]
+    matchup_position = models.CharField(max_length=3, choices=position_choices, 
+                                        null=True, blank=True) # top or bottom of matchup
+    
+    def __str__(self):
+        return self.college + ' ' + self.mascot
+    
+    class Meta:
+        ordering = ['region_position']
+
+
+class Stat(models.Model):
+    team = models.OneToOneField(Team, related_name="stats", on_delete=models.CASCADE, null=True, blank=True)
     ppg = models.FloatField()       # points per game
     opp_ppg = models.FloatField()      # opponent points per game
     avg_score_margin = models.FloatField()       # avg score margin
@@ -64,9 +80,46 @@ class Team(models.Model):
     pfpg = models.FloatField()      # personal fouls per game
     opp_pfpg = models.FloatField()     # opponent personal fouls per game
 
-    class Meta:
-        ordering = ['region_position']
-    
     def __str__(self):
-        return self.college + ' ' + self.mascot
+        return self.team.college + ' stats'
 
+
+class Matchup(models.Model):
+    region = models.ForeignKey(Region, related_name="matchups", null=True, blank=True, 
+                               on_delete=models.CASCADE)
+    bracket = models.ForeignKey(Bracket, related_name="matchups", on_delete=models.CASCADE,
+                                null=True, blank=True)
+    round = models.IntegerField()
+    team_a = models.ForeignKey(  
+		Team,
+		on_delete=models.SET_NULL,
+		related_name="team_a",
+		null=True,
+		blank=True
+	)
+    team_b = models.ForeignKey(  
+		Team,
+		on_delete=models.SET_NULL,
+		related_name="team_b",
+		null=True,
+		blank=True
+	)
+
+    team_a_score = models.IntegerField(default=0)
+    team_b_score = models.IntegerField(default=0)
+
+    winner = models.ForeignKey(  
+		Team,
+		on_delete=models.SET_NULL,
+		related_name="winner",
+		null=True,
+		blank=True
+	)
+
+    game_date_time = models.DateTimeField(blank=True,null=True)
+
+    def __str__(self):
+        return "Game #: {}".format(self.id)
+
+    class Meta:
+        ordering = ['id']

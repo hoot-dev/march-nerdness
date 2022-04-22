@@ -8,6 +8,9 @@ web_scraper.py
 sample.html
 team_slugs
 teams
+pytest.ini
+bracket.html
+user_auth
 
 
 # Byte-compiled / optimized / DLL files
